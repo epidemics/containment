@@ -3,3 +3,7 @@
 .ipynb-checkpoints/*
 
 .~*
+
+*.xlsx
+
+*.png
