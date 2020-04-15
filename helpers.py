@@ -1,5 +1,8 @@
 import pandas as pd
+import numpy as np
 from notion.client import NotionClient
+from notion.collection import NotionDate
+
 
 def get_notion_client(credentials_file='.notion-token'):
     """
@@ -12,6 +15,18 @@ def get_notion_client(credentials_file='.notion-token'):
         NOTION_TOKEN = token_file.read().strip()
 
     return NotionClient(token_v2=NOTION_TOKEN)
+
+
+def df_from_notion_table(table, convert_dates=True):
+    rows = table.collection.get_rows()
+    df = pd.DataFrame([row.get_all_properties() for row in rows])
+    if convert_dates:
+        for col in df:
+            if df[col].dtype == np.dtype('O'):
+                series = df[col].dropna()
+                if isinstance(series[0], NotionDate):
+                    df[col] = series.apply(lambda d: d.start).astype('M')
+    return df
 
 
 def get_api_metadata(notion_client, comment=None):
