@@ -1,3 +1,5 @@
 .notion-token
 *.csv
 .ipynb_checkpoints/*
+
+data
