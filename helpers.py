@@ -24,7 +24,7 @@ def df_from_notion_table(table, convert_dates=True):
         for col in df:
             if df[col].dtype == np.dtype('O'):
                 series = df[col].dropna()
-                if isinstance(series[0], NotionDate):
+                if isinstance(series.get(0), NotionDate):
                     df[col] = series.apply(lambda d: d.start).astype('M')
     return df
 
